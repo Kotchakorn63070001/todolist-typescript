@@ -6,16 +6,18 @@ import Button from "@mui/material/Button/Button";
 import Box from "@mui/material/Box/Box";
 import ItemToDo from "./components/ItemToDo";
 
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./redux/store";
+import { addItemTodo, setStatusItem } from "./redux/TodoSlice";
+
 interface State {
-  toDoList: {
-    itemName: string;
-    status: boolean;
-  }[];
+  // toDoList: {
+  //   itemName: string;
+  //   status: boolean;
+  // }[];
   inputItemName: string;
   valid: boolean;
 }
-
-// type setStatus = (index: number, checked: boolean) => void;
 
 function App() {
   const theme = createTheme({
@@ -32,13 +34,15 @@ function App() {
   //   {itemName: 'ออกกำลังกาย', status: false}
   // ]
 
-  const [toDoList, setToDoList] = useState<State["toDoList"]>([])
-
+  // const [toDoList, setToDoList] = useState<State["toDoList"]>([])
   const [inputItemName, setInputItemName] = useState<State["inputItemName"]>('')
   const [valid, setValid] = useState<State["valid"]>(false)
 
+  // useSelector ดึง state toDoList ออกมา
+  const toDoList = useSelector((state: RootState) => state);
+  const dispatch = useDispatch<AppDispatch>();
+
   const inputName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(event.target.value)
     setInputItemName(event.target.value)
   }
 
@@ -49,36 +53,24 @@ function App() {
         // <Alert severity="error">Please fill your task !</Alert>
       }
       else{
-        const newItem = {
-          itemName: inputItemName,
-          status: false
-        }
-        
-        setToDoList((prevToDo) => {
-          return [...prevToDo, newItem]
-        })
+        // const newItem = {
+        //   itemName: inputItemName,
+        //   status: false
+        // }
+        // setToDoList((prevToDo) => {
+        //   return [...prevToDo, newItem]
+        // })
+        // setInputItemName('')
+        dispatch(addItemTodo(inputItemName));
         setInputItemName('')
       }
   }
 
-  const setStatus = (index: number, checked: boolean) => {
-    if (checked === true){
-      setToDoList(toDoList.filter((element, id) => {
-        if (index === id){
-          return false
-        }
-        return true
-      }))
-    }
-    else{
-      setToDoList(toDoList.map((element, id) => {
-        if(index === id){
-          return {...element, status: false}
-        }
-        return element
-      }))
-    }
-  }
+  // const setStatus = (index: number, checked: boolean) => {
+  //   if (checked === true){
+  //     dispatch(setStatusItem({index: index, checked: checked}))
+  //   }
+  // }
 
   useEffect(() => {
     console.log('use effect')
@@ -102,7 +94,7 @@ function App() {
         </Stack>
       </Box>
 
-      <ItemToDo toDoList={toDoList} setStatus={setStatus}/>
+      <ItemToDo/>
     </ThemeProvider>
   );
 }
