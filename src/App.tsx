@@ -8,7 +8,7 @@ import ItemToDo from "./components/ItemToDo";
 
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./redux/store";
-import { addItemTodo, setStatusItem } from "./redux/TodoSlice";
+import { addItemTodo } from "./redux/TodoSlice";
 
 interface State {
   // toDoList: {
